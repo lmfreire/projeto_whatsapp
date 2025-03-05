@@ -34,7 +34,7 @@ export class AppService {
         }
       })
 
-      if (!conversa) {
+      if (!conversa && message != 'Iniciar') {
         const url = 'https://evolution-api.lemarq.inf.br/message/sendText/teste_whatsapp';
 
         const headers = {
@@ -47,19 +47,17 @@ export class AppService {
           text: 'Envie "Iniciar" para começar a conversa',
         };
 
-        console.log(headers);
-        console.log(data);
-        
+        // console.log(headers);
+        // console.log(data);
         try {
           const response = await firstValueFrom(
             this.httpService.post(url, data, { headers })
           );
-          console.log(response.data);
+          // console.log(response.data);
           // return response.data;
         } catch (error) {
           // throw new Error(`Erro na requisição: ${error.message}`);
-          console.log(error.message);
-          
+          // console.log(error.message);
         }
         return;
       }
