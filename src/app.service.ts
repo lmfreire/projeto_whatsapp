@@ -10,7 +10,7 @@ export class AppService {
   ) {}
 
   async handleWebhook(data: MessageDTO) {
-    const message = data.message;
+    const message = data.message.conversation;
     const remoteJid = data.remoteJid;
 
     const contato = await this.prismaService.contato.findFirst({ 

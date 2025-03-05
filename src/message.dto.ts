@@ -1,4 +1,8 @@
 export class MessageDTO {
-    message: string;
+    message: ConversationDTO;
     remoteJid: string;
+}
+
+export class ConversationDTO {
+    conversation: string;
 }
