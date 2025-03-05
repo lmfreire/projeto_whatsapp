@@ -14,7 +14,9 @@ export class AppController {
   @HttpCode(200)
   handleWebhook(@Body() payload: any) {
     const message = payload.data.message;
-    console.log('Payload recebido do webhook:', message);
+    const remoteJid = payload.data.key.remoteJid;
+    console.log('Payload recebido do webhook message:', message);
+    console.log('Payload recebido do webhook remoteJid:', remoteJid);
 
     // console.log('Payload recebido do webhook:', payload);
     // console.log(payload);
