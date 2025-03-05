@@ -13,9 +13,11 @@ export class AppController {
   @Post('webhook')
   @HttpCode(200)
   handleWebhook(@Body() payload: any) {
-    console.log('Payload recebido do webhook:', payload);
-    // Aqui você pode processar a mensagem, salvar no banco de dados, etc.
-    console.log(payload);
+    const message = payload.data.message;
+    console.log('Payload recebido do webhook:', message);
+
+    // console.log('Payload recebido do webhook:', payload);
+    // console.log(payload);
     return { status: 'success' };
   }
 }
