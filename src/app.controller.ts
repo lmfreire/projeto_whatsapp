@@ -13,9 +13,10 @@ export class AppController {
   @Post('webhook')
   @HttpCode(200)
   handleWebhook(@Body() payload: any) {
-    
-    this.appService.handleWebhook(payload);
-    
+    const message = payload.data.message;
+    const remoteJid = payload.data.key.remoteJid;
+
+    this.appService.handleWebhook({ message, remoteJid });
     return { status: 'success' };
   }
 }

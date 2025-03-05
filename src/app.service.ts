@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
+import { MessageDTO } from './message.dto';
 
 @Injectable()
 export class AppService {
@@ -8,9 +9,9 @@ export class AppService {
     private readonly prismaService: PrismaService
   ) {}
 
-  async handleWebhook(payload: any) {
-    const message = payload.data.message;
-    const remoteJid = payload.data.key.remoteJid;
+  async handleWebhook(data: MessageDTO) {
+    const message = data.message;
+    const remoteJid = data.remoteJid;
 
     const contato = await this.prismaService.contato.findFirst({ 
       where: {
@@ -19,7 +20,7 @@ export class AppService {
     });
 
     if (contato) {
-      console.log(`Mensagem de ${message}: ${message}`);
+      console.log(`Mensagem de ${remoteJid}: ${message}`);
     }
 
   }
