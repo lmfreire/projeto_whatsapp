@@ -46,7 +46,9 @@ export class AppService {
           text: 'Envie "Iniciar" para começar a conversa',
         };
 
-        this.httpService.post(url, data, { headers })
+        console.log(data);
+        
+        await this.httpService.post(url, data, { headers })
 
         return;
       }
