@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { MessageDTO } from './message.dto';
 import { ClientProxy } from '@nestjs/microservices';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class AppService {
@@ -9,7 +10,8 @@ export class AppService {
   constructor(
     private readonly prismaService: PrismaService,
     @Inject('ORDERS_SERVICE')
-    private readonly rabbitClient: ClientProxy
+    private readonly rabbitClient: ClientProxy,
+    private readonly httpService: HttpService
   ) {}
 
   async handleWebhook(data: MessageDTO) {
@@ -23,7 +25,32 @@ export class AppService {
     });
 
     if (contato) {
-      console.log({message: message});
+
+      const conversa = await this.prismaService.conversa.findFirst({
+        where: {
+          contatoId: contato.id,
+          dt_fim: null
+        }
+      })
+
+      if (!conversa) {
+        const url = 'https://evolution-api.lemarq.inf.br/message/sendText/teste_whatsapp';
+
+        const headers = {
+          'Content-Type': 'application/json',
+          'apikey': process.env.API_KEY, 
+        };
+
+        const data = {
+          number: contato.numero,
+          text: 'Envie "Iniciar" para começar a conversa',
+        };
+
+        this.httpService.post(url, data, { headers })
+
+        return;
+      }
+
       if (message == 'Iniciar') {
         await this.prismaService.conversa.create({
           data: {
