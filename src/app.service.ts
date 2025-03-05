@@ -20,7 +20,7 @@ export class AppService {
     });
 
     if (contato) {
-      console.log(`Mensagem de ${remoteJid}: ${message}`);
+      console.log({message: message});
     }
 
   }
