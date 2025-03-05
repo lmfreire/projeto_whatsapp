@@ -35,30 +35,7 @@ export class AppService {
       })
 
       if (!conversa && message != 'Iniciar') {
-        const url = 'https://evolution-api.lemarq.inf.br/message/sendText/teste_whatsapp';
-
-        const headers = {
-          'Content-Type': 'application/json',
-          'apikey': process.env.API_KEY, 
-        };
-
-        const data = {
-          number: contato.numero,
-          text: 'Envie "Iniciar" para começar a conversa',
-        };
-
-        // console.log(headers);
-        // console.log(data);
-        try {
-          const response = await firstValueFrom(
-            this.httpService.post(url, data, { headers })
-          );
-          // console.log(response.data);
-          // return response.data;
-        } catch (error) {
-          // throw new Error(`Erro na requisição: ${error.message}`);
-          // console.log(error.message);
-        }
+        await this.EnviarMensagem(remoteJid, 'Olá, para iniciar a conversa digite "Iniciar"');
         return;
       }
 
@@ -69,6 +46,7 @@ export class AppService {
           }
         })
 
+        await this.EnviarMensagem(remoteJid, 'Chat iniciado com sucesso!');
         return;
       } 
       
@@ -82,10 +60,39 @@ export class AppService {
           }
         })
 
+        await this.EnviarMensagem(remoteJid, 'Chat Finalizado com sucesso!');
         return;
       } 
       this.rabbitClient.emit('order-placed', { message: message, remoteJid: remoteJid});
     }
 
+  }
+
+  async EnviarMensagem(numero: string, mensagem: string) {
+    const url = 'https://evolution-api.lemarq.inf.br/message/sendText/teste_whatsapp';
+
+      const headers = {
+        'Content-Type': 'application/json',
+        'apikey': process.env.API_KEY, 
+      };
+
+      const data = {
+        number: numero,
+        text: mensagem,
+      };
+
+      // console.log(headers);
+      // console.log(data);
+      try {
+        const response = await firstValueFrom(
+          this.httpService.post(url, data, { headers })
+        );
+        // console.log(response.data);
+        // return response.data;
+      } catch (error) {
+        // throw new Error(`Erro na requisição: ${error.message}`);
+        // console.log(error.message);
+      }
+      return;
   }
 }
