@@ -17,4 +17,14 @@ model Contato {
   id          Int      @id @default(autoincrement())
   numero      String
   
+
+  Conversa Conversa[]
+}
+
+model Conversa {
+  id        Int      @id @default(autoincrement())
+  contatoId Int
+  contato    Contato  @relation(fields: [contatoId], references: [id])
+  dt_inicio DateTime @default(now())
+  dt_fim    DateTime?
 }

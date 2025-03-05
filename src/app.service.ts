@@ -24,6 +24,28 @@ export class AppService {
 
     if (contato) {
       // console.log({message: message});
+      if (message == 'Iniciar') {
+        this.prismaService.conversa.create({
+          data: {
+            contatoId: contato.id
+          }
+        })
+
+        return;
+      } 
+      
+      if (message == 'Fim') {
+        this.prismaService.conversa.updateMany({
+          where: {
+            contatoId: contato.id
+          },
+          data: {
+            dt_fim: new Date()
+          }
+        })
+
+        return;
+      } 
       this.rabbitClient.emit('order-placed', { message: message, remoteJid: remoteJid});
     }
 
