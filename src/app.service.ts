@@ -23,9 +23,9 @@ export class AppService {
     });
 
     if (contato) {
-      // console.log({message: message});
+      console.log({message: message});
       if (message == 'Iniciar') {
-        this.prismaService.conversa.create({
+        await this.prismaService.conversa.create({
           data: {
             contatoId: contato.id
           }
@@ -35,7 +35,7 @@ export class AppService {
       } 
       
       if (message == 'Fim') {
-        this.prismaService.conversa.updateMany({
+        await this.prismaService.conversa.updateMany({
           where: {
             contatoId: contato.id
           },
