@@ -3,6 +3,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { MessageDTO } from './message.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AppService {
@@ -46,10 +47,20 @@ export class AppService {
           text: 'Envie "Iniciar" para começar a conversa',
         };
 
-        // console.log(data);
+        console.log(headers);
+        console.log(data);
         
-        await this.httpService.post(url, data, { headers })
-
+        try {
+          const response = await firstValueFrom(
+            this.httpService.post(url, data, { headers })
+          );
+          console.log(response.data);
+          // return response.data;
+        } catch (error) {
+          // throw new Error(`Erro na requisição: ${error.message}`);
+          console.log(error.message);
+          
+        }
         return;
       }
 
