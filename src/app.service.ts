@@ -44,7 +44,7 @@ export class AppService {
     const message = data.message.conversation;
     const remoteJid = data.remoteJid;
 
-    const contatos: ContatosDTO[] = (await this.cacheManager.get('contatos')) || [];
+    let contatos: ContatosDTO[] = (await this.cacheManager.get('contatos')) || [];
 
     console.log(contatos);
     console.log(!contatos);
