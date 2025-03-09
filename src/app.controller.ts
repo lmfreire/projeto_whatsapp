@@ -1,5 +1,6 @@
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ContatoDTO } from './message.dto';
 
 @Controller()
 export class AppController {
@@ -8,6 +9,11 @@ export class AppController {
   @Get()
   getHello(): string {
     return "Hello";
+  }
+
+  @Post('contato')
+  async handleContato(@Body() data: ContatoDTO) {
+    return await this.appService.atualizarContatos(data);
   }
   
   @Post('webhook')

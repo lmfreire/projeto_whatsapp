@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
-import { MessageDTO } from './message.dto';
+import { ContatoDTO, ContatosDTO, MessageDTO } from './message.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AppService {
@@ -12,18 +13,52 @@ export class AppService {
     private readonly prismaService: PrismaService,
     @Inject('ORDERS_SERVICE')
     private readonly rabbitClient: ClientProxy,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    @Inject('CACHE_MANAGER') 
+    private cacheManager: Cache
   ) {}
+
+  async atualizarContatos(data: ContatoDTO) {
+    let contato = await this.prismaService.contato.findFirst({ 
+      where: {
+        numero: data.numero
+      }
+    });
+
+    if (!contato) {
+      contato = await this.prismaService.contato.create({
+        data: {
+          numero: data.numero
+        }
+      })
+    }
+
+    const contatos = await this.prismaService.contato.findMany();
+
+    await this.cacheManager.set('contatos', contatos);
+
+    return contato;
+  }
 
   async handleWebhook(data: MessageDTO) {
     const message = data.message.conversation;
     const remoteJid = data.remoteJid;
 
-    const contato = await this.prismaService.contato.findFirst({ 
-      where: {
-        numero: remoteJid
-      }
-    });
+    const contatos: ContatosDTO[] = (await this.cacheManager.get('contatos')) || [];
+
+    if (!contatos) {
+      let contatos = await this.prismaService.contato.findMany();
+
+      await this.cacheManager.set('contatos', contatos);
+    }
+
+    const contato = contatos.find((contato) => contato.numero == remoteJid);
+    // const contato = await this.prismaService.contato.findFirst({ 
+    //   where: {
+    //     numero: remoteJid
+    //   }
+    // });
+    
 
     if (contato) {
 
@@ -81,17 +116,12 @@ export class AppService {
         text: mensagem,
       };
 
-      // console.log(headers);
-      // console.log(data);
       try {
         const response = await firstValueFrom(
           this.httpService.post(url, data, { headers })
         );
-        // console.log(response.data);
-        // return response.data;
       } catch (error) {
-        // throw new Error(`Erro na requisição: ${error.message}`);
-        // console.log(error.message);
+        console.log(error.message);
       }
       return;
   }
