@@ -53,6 +53,9 @@ export class AppService {
     }
 
     const contato = contatos.find((contato) => contato.numero == remoteJid);
+
+    console.log(contato);
+    
     // const contato = await this.prismaService.contato.findFirst({ 
     //   where: {
     //     numero: remoteJid
