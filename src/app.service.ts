@@ -28,7 +28,7 @@ export class AppService {
     if (!contato) {
       contato = await this.prismaService.contato.create({
         data: {
-          numero: data.numero
+          numero: `5584${data.numero}@s.whatsapp.net`
         }
       })
     }
@@ -46,10 +46,6 @@ export class AppService {
 
     let contatos: ContatosDTO[] = (await this.cacheManager.get('contatos')) || [];
 
-    console.log(contatos);
-    console.log(!contatos);
-    console.log(contatos.length == 0);
-    
     if (contatos.length == 0) {
       contatos = await this.prismaService.contato.findMany();
 
@@ -57,15 +53,6 @@ export class AppService {
     }
 
     const contato = contatos.find((contato) => contato.numero == remoteJid);
-
-    console.log(contato);
-    
-    // const contato = await this.prismaService.contato.findFirst({ 
-    //   where: {
-    //     numero: remoteJid
-    //   }
-    // });
-    
 
     if (contato) {
 
@@ -111,7 +98,7 @@ export class AppService {
   }
 
   async EnviarMensagem(numero: string, mensagem: string) {
-    const url = 'https://evolution-api.lemarq.inf.br/message/sendText/teste_whatsapp';
+    const url = process.env.URL_API ?? '';
 
       const headers = {
         'Content-Type': 'application/json',
