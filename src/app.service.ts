@@ -48,9 +48,10 @@ export class AppService {
 
     console.log(contatos);
     console.log(!contatos);
+    console.log(contatos.length == 0);
     
     if (contatos.length == 0) {
-      let contatos = await this.prismaService.contato.findMany();
+      contatos = await this.prismaService.contato.findMany();
 
       await this.cacheManager.set('contatos', contatos);
     }
