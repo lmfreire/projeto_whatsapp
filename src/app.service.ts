@@ -21,7 +21,7 @@ export class AppService {
   async atualizarContatos(data: ContatoDTO) {
     let contato = await this.prismaService.contato.findFirst({ 
       where: {
-        numero: data.numero
+        numero: `5584${data.numero}@s.whatsapp.net`
       }
     });
 
