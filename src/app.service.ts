@@ -46,6 +46,9 @@ export class AppService {
 
     const contatos: ContatosDTO[] = (await this.cacheManager.get('contatos')) || [];
 
+    console.log(contatos);
+    console.log(!contatos);
+    
     if (!contatos) {
       let contatos = await this.prismaService.contato.findMany();
 
