@@ -1,99 +1,106 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Projeto WhatsApp
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este é um projeto desenvolvido com o framework **NestJS**, que tem como objetivo integrar e gerenciar mensagens enviadas e recebidas via WhatsApp. Ele utiliza uma arquitetura modular e escalável, com suporte a microserviços, banco de dados relacional e comunicação assíncrona via RabbitMQ.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Funcionalidades
 
-## Description
+- **Gerenciamento de Contatos**: Criação e atualização de contatos no banco de dados.
+- **Envio de Mensagens**: Envio de mensagens para números de WhatsApp utilizando uma API externa.
+- **Recebimento de Mensagens**: Processamento de mensagens recebidas via webhook.
+- **Controle de Conversas**: Início e término de conversas com base em comandos recebidos.
+- **Integração com RabbitMQ**: Comunicação assíncrona para processamento de mensagens.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tecnologias Utilizadas
 
-## Project setup
+- **NestJS**: Framework para construção de aplicações Node.js escaláveis.
+- **TypeScript**: Linguagem utilizada para desenvolvimento.
+- **Prisma ORM**: Gerenciamento do banco de dados PostgreSQL.
+- **RabbitMQ**: Comunicação assíncrona entre serviços.
+- **Axios**: Biblioteca para requisições HTTP.
+- **CacheModule**: Cache para armazenamento temporário de dados.
+- **Jest**: Framework de testes.
 
+## Estrutura do Projeto
+
+- **src/**: Código-fonte principal do projeto.
+- **prisma/**: Configuração do banco de dados e migrações.
+- **test/**: Testes automatizados.
+- **_projeto_api_whatsapp/**: Submódulo responsável por consumir mensagens de RabbitMQ e processá-las.
+
+## Configuração do Ambiente
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/projeto_whatsapp.git
+   cd projeto_whatsapp
+   ```
+
+2. Configure o submódulo:
+   ```bash
+   git submodule update --init --recursive
+   ```
+
+3. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+4. Configure as variáveis de ambiente:
+   - Crie um arquivo `.env` na raiz do projeto com base no arquivo `.envExample`.
+   - Configure as variáveis, como a URL do banco de dados, credenciais do RabbitMQ e API Key.
+
+5. Execute as migrações do banco de dados:
+   ```bash
+   npx prisma migrate dev
+   ```
+
+6. Inicie o servidor:
+   ```bash
+   npm run start:dev
+   ```
+
+## Endpoints Principais
+
+### Webhook
+- **POST /webhook**
+  - Recebe mensagens e processa comandos como "Iniciar" e "Fim".
+
+### Contatos
+- **POST /contato**
+  - Cria ou atualiza um contato no banco de dados.
+
+### Mensagens
+- **POST /mensagem**
+  - Envia uma mensagem para um número de WhatsApp.
+
+## Testes
+
+Para executar os testes, utilize o comando:
 ```bash
-$ npm install
+npm run test
 ```
 
-## Compile and run the project
+## Como Contribuir
 
-```bash
-# development
-$ npm run start
+1. Faça um fork do repositório.
+2. Crie uma branch para sua feature:
+   ```bash
+   git checkout -b minha-feature
+   ```
+3. Faça as alterações e commit:
+   ```bash
+   git commit -m "Minha nova feature"
+   ```
+4. Envie para o repositório remoto:
+   ```bash
+   git push origin minha-feature
+   ```
+5. Abra um Pull Request.
 
-# watch mode
-$ npm run start:dev
+## Licença
 
-# production mode
-$ npm run start:prod
-```
+Este projeto está licenciado sob a [MIT License](LICENSE).
 
-## Run tests
+## Contato
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Para dúvidas ou sugestões, entre em contato pelo e-mail: [seu-email@exemplo.com](mailto:seu-email@exemplo.com).
